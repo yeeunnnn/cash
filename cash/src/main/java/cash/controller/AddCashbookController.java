@@ -95,21 +95,22 @@ public class AddCashbookController extends HttpServlet {
 		
 		Set<String> set = new HashSet<String>(); // 중복된 해시태그방지를 위해 set자료구조를 사용
 		
-		// 해시태그가 여러개이면 반복해서 입력
-		for(String ht : memo2.split(" ")) {
+		for(String ht : memo2.split(" ")) { // issue : split된 배열을 Set으로 변경하면 중복된 내용 제거 가능
 			if (ht.startsWith("#")) {
-				
-				
-				
-				String ht2 = ht.replace("#", "");
-				if(ht.length() > 0) {
-					Hashtag hashtag = new Hashtag();
-					hashtag.setCashbookNo(cashbookNo);
-					hashtag.setWord(ht2);
-					hashtagDao.insertHashtag(hashtag);
-				}
-			}
+                String ht2 = ht.replace("#", "");
+			    if(ht2.length() > 0) {
+                    set.add(ht2); // set은 중복된 값은 add되지 않는다
+			    }
+            }
 		}
+		
+        for(String s : set) {
+        		Hashtag hashtag = new Hashtag();
+				hashtag.setCashbookNo(cashbookNo);
+				hashtag.setWord(s);
+				hashtagDao.insertHashtag(hashtag);
+        }
+        
 		// redirect -> 날짜를 누르면 나오는 cashbookList? cashbookOne.
 		response.sendRedirect(request.getContextPath()+"/calendarOne?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
 	}
