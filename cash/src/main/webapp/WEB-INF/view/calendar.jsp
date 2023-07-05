@@ -15,6 +15,23 @@
 <head>
 <meta charset="UTF-8">
 <title>calendar</title>
+<style>
+	table{
+		border-collapse: collapse;
+	}
+	td {
+		border: 1px solid gray;
+		padding: 3px;
+		width: 120px;
+		height: 120px;
+	}
+	th{
+		background-color: #dddddd;
+		font-weight: bold;
+		border: 1px solid gray;
+		height : 30px;
+	}
+</style>
 </head>
 <body>
 	<!-- 변수값 or 반환값 : EL 사용 $ 표현식 -->
@@ -34,49 +51,53 @@
 		<h2>이달의 해시태그</h2>
 		<div>
 			<c:forEach var="m" items="${htList}">
-				<a href="">${m.word}(${m.cnt})</a>
+				<a href="${pageContext.request.contextPath}/cashbookList?word=${m.word}">${m.word}(${m.cnt})</a>
 			</c:forEach>
 		</div>
 	</div>
-	<table border="1" width="80%">
-		<tr>
-			<th>일</th>
-			<th>월</th>
-			<th>화</th>
-			<th>수</th>
-			<th>목</th>
-			<th>금</th>
-			<th>토</th>
-		</tr>
-		<tr>
-			<c:forEach var="i" begin="0" end="${totalCell - 1}" step="1">
-				<c:set var="d" value="${i-beginBlank+1}"></c:set>
-				<c:if test="${i!=0 && i%7==0}">
-					<tr></tr>
-				</c:if>
-				
-				<c:if test="${d < 1 || d > lastDate}">
-					<td></td><!-- 범위 밖 날짜는 빈 셀을 출력 -->
-				</c:if>
-				<c:if test="${!( d < 1 || d > lastDate)}">
-					<td>
-						<div><a href="${pageContext.request.contextPath}/calendarOne?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${d}">${d}</a></div>
-						<c:forEach var="c" items="${list}">
-							<c:if test="${d == fn:substring(c.cashbookDate, 8, 10)}">
-								<div>
-									<c:if test="${c.category == '수입'}">
-										<span>+${c.price}</span>
-									</c:if>
-									<c:if test="${c.category == '지출'}">
-										<span style="color:red;">-${c.price}</span>
-									</c:if>
-								</div>
-							</c:if>
-						</c:forEach>	
-					</td><!-- 날짜가 1부터 lastDate까지만 출력될 수 있도록 -->
-				</c:if>
-			</c:forEach>
-		</tr>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>일</th>
+				<th>월</th>
+				<th>화</th>
+				<th>수</th>
+				<th>목</th>
+				<th>금</th>
+				<th>토</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<c:forEach var="i" begin="0" end="${totalCell - 1}" step="1">
+					<c:set var="d" value="${i-beginBlank+1}"></c:set>
+					<c:if test="${i!=0 && i%7==0}">
+						<tr></tr><!-- 개행 -->
+					</c:if>
+					
+					<c:if test="${d < 1 || d > lastDate}">
+						<td></td><!-- 범위 밖 날짜는 빈 셀을 출력 -->
+					</c:if>
+					<c:if test="${!( d < 1 || d > lastDate)}">
+						<td>
+							<div onclick="location.href='${pageContext.request.contextPath}/calendarOne?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${d}'">${d}</div>
+							<c:forEach var="c" items="${list}">
+								<c:if test="${d == fn:substring(c.cashbookDate, 8, 10)}">
+									<div>
+										<c:if test="${c.category == '수입'}">
+											<span>+${c.price}</span>
+										</c:if>
+										<c:if test="${c.category == '지출'}">
+											<span style="color:red;">-${c.price}</span>
+										</c:if>
+									</div>
+								</c:if>
+							</c:forEach>	
+						</td><!-- 날짜가 1부터 lastDate까지만 출력될 수 있도록 -->
+					</c:if>
+				</c:forEach>
+			</tr>
+		</tbody>
 	</table>
 </body>
 </html>
