@@ -73,8 +73,13 @@
 							</c:choose>
 						</td>
 						<td>${c.memo}</td>
-						<td><a type="button" href="${pageContext.request.contextPath}/modifyCashbook?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${d}">수정</a></td>
-						<td><a type="button" href="${pageContext.request.contextPath}/removeCashbook?cashbookNo=${c.cashbookNo}">삭제</a></td>
+						<td><a type="button" href="${pageContext.request.contextPath}/modifyCashbook?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">수정</a></td>
+						<td>
+							<form method="post" action="${pageContext.request.contextPath}/removeCashbook?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">
+							  <input type="hidden" name="cashbookNo" value="${c.cashbookNo}">
+							  <button type="submit">삭제</button>
+							</form>
+						</td>
 					</tr>
 				</tbody>
 			</c:forEach>

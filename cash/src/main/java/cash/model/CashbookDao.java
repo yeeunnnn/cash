@@ -277,6 +277,39 @@ public class CashbookDao {
 			}
 		return row;
 	}
+	public int selectCashbookNo(int cashbookNo) {
+		int hashtagCashbookNo = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT count(*) count FROM hashtag WHERE cashbook_no = ?";
+		try {
+			String driver = "org.mariadb.jdbc.Driver";
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			Class.forName(driver);
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, cashbookNo);
+			System.out.println(stmt+" <-- selectCashbookNo stmt");
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				hashtagCashbookNo = rs.getInt("count");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return hashtagCashbookNo;	
+	}
 	// 가계부 삭제(hashtag의 word도 함께 삭제)
 	public int removeCashbook(int cashbookNo){
 		int row = 0;
@@ -292,8 +325,9 @@ public class CashbookDao {
 				conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 				stmt = conn.prepareStatement(sql);
 				stmt.setInt(1, cashbookNo);
-				System.out.println(stmt+" <-- cashbookTotalRow");
+				System.out.println(stmt+" <-- removeCashbook");
 				row = stmt.executeUpdate();
+				System.out.println(row+" <-- removeCashbook row");
 			} catch(Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -306,5 +340,35 @@ public class CashbookDao {
 			}
 		return row;
 	}
+	// cashbook에서만 가계부 삭제
+		public int removeOnlyCashbook(int cashbookNo){
+			int row = 0;
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			String sql = "DELETE FROM cashbook WHERE cashbook_no = ?";
+				try {
+					String driver = "org.mariadb.jdbc.Driver";
+					String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+					String dbUser = "root";
+					String dbPw = "java1234";
+					Class.forName(driver);
+					conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, cashbookNo);
+					System.out.println(stmt+" <-- removeOnlyCashbook");
+					row = stmt.executeUpdate();
+					System.out.println(row+" <-- removeOnlyCashbook row");
+				} catch(Exception e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						stmt.close();
+						conn.close();
+					} catch(Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			return row;
+		}
 }
 

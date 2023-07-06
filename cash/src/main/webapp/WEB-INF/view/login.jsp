@@ -12,11 +12,14 @@
 	<table border="1">
 		<tr>
 			<td>memberId</td>
-			<td><input type="text" name="memberId"></td>
+			<td><input type="text" name="memberId" value="${loginId}"></td>
 		</tr>
 		<tr>
 			<td>memberPw</td>
 			<td><input type="password" name="memberPw"></td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="idSave" value="y">ID저장</td>
 		</tr>
 	</table>
 	<button type="submit">로그인</button>
