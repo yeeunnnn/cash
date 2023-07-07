@@ -54,9 +54,10 @@ public class LoginController extends HttpServlet {
 	   session.setAttribute("loginMember", loginMember);
 	   // idSave체크값이 넘어왔다면
 			if(request.getParameter("idSave")!=null) {
-				Cookie loginIdCookie = new Cookie("loginId", loginMember.getMemberId()); // defalt생성자() 안됨. cookie하나가 곧 맵임. String:String을 저장 = (poperties)의 자식. 키:값 키:값 cookie.put 이런식으로 해도 됨
-				// loginIdCookie.setMaxAge(60*60*24); // 초단위임. 설정하기.
-				response.addCookie(loginIdCookie); // 클라이언트 브라우저에 쿠키를 전송한 후 저장
+				Cookie loginIdCookie = new Cookie("loginId", loginMember.getMemberId()); // defalt생성자 '()'는 사용못함. cookie하나가 곧 맵이므로 String:String 형태로 저장해야함.
+																						 // (poperties)의 자식. 키:값 키:값 cookie.put 이런식으로도 가능.
+				// loginIdCookie.setMaxAge(60*60*24); // 초단위. 추후 설정.
+				response.addCookie(loginIdCookie); // 클라이언트 브라우저에 쿠키를 전송한 후 저장.
 			}
 	   response.sendRedirect(request.getContextPath()+"/cashbook");
 	   
